@@ -157,7 +157,7 @@ class ObjectTracker(EuclideanDistTracker):      # Takes the bounding box of the 
         object_filename = self.filename + '_' + str(object_type) + '.csv'
         start_timestamp = datetime(*map(int, re.split('-|_', self.filename.split(' ')[-1])))
         video_type = self.filename.split(' ')[0]
-        time_offset = {'Middle': 0, 'Right': 0, 'Left': 0}    # Delay occurs
+        time_offset = {'Middle': 0, 'Far_Right': 0, 'Far_Left': 0}    # Delay occurs
         frame_timestamp = start_timestamp + timedelta(seconds=frame_num/self.fps + time_offset[video_type])     # Add time offset depending on video type
         file_path = os.path.join(new_object_directory_name, 'frame_num_' + str(frame_num) + '.jpg')
         csv_elements = box_id + [start_timestamp.strftime("%Y/%m/%d %H:%M:%S.%f"), frame_timestamp.strftime("%Y/%m/%d %H:%M:%S.%f"), file_path]
