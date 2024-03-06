@@ -67,7 +67,8 @@ def main():
     # frames of the video as OpenCV objects (numpy arrays)
     cap = cv2.VideoCapture(video_directory)
     fps = cap.get(cv2.CAP_PROP_FPS)
-    print("fps", fps)           # asf: 30.0 fps / mp4: Middle 30.030505776063908 Right 30.031325505233884
+    frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    print("fps / frame counts: ", fps, frames)           # asf: 30.0 fps / mp4: Middle 30.030505776063908 Right 30.031325505233884
 
     ##########################################################################################################################
     # Setting up a video writer for making output videos
@@ -105,6 +106,7 @@ def main():
     
     endTime = time.time() 
     executionTime = endTime - startTime
+    print('real frame numbers: ', frame_num)
     print('Execution time in seconds: ' + str(executionTime))
 
 
