@@ -1,4 +1,7 @@
 import numpy as np
+from datetime import datetime, timedelta
+import pandas as pd
+
 
 def splitByIndentation(data : str):
     indented = False
@@ -18,6 +21,7 @@ def splitByIndentation(data : str):
             prevLine = line
             indented = False
     return output
+
 
 def read_cnt_from_csv(cnt):
     # Need to clean up!!
@@ -45,43 +49,9 @@ def read_cnt_from_csv(cnt):
     return ray
 
 
-def find_depth(right_point, left_point):
-    # M = np.array([[8446.55113357],
-    #               [ -57.46447252]])
-    M = 8446.55113357 #ft
-    baseline = 99      # Distance between the cameras [cm] -> need to verify: (changed 95.25 to 99cm after actual measurement)
-    f = 19             # Camera lense's focal length [mm]
-    alpha = 19.4       # Camera field of view in the horizontal plane [degrees]
-    mean = 173.1121542
-    std = 34.94402137
-    normalized = 0.876034097 #This was found at 255 feet in the truck example
+def create_df_analysis():
+    # Dataframe to save the results
+    headers = {'Object Type':[], 'Object ID':[], 'Rectified Left Center (px)':[], 'Rectified Middle Center (px)':[], 'Rectified Right Center (px)':[], 'Depth Prediction (cm)':[], 'Left Multi Predictions':[], 'Middle Multi Predictions':[], 'Right Multi Predictions':[],  'Left Detected Countour Array (px)':[], 'Middle Detected Countour Array (px)':[], 'Right Detected Countour Array (px)':[], 'Left Contour Area (px)':[], 'Middle Contour Area (px)':[], 'Right Contour Area (px)':[], 'Estimated Contour Area (in^2)':[], 'Time':[], 'Left Image':[], 'Middle Image':[], 'Right Image':[]}
+    df_bats = pd.DataFrame(headers)
 
-    # CONVERT FOCAL LENGTH f FROM [mm] TO [pixel]:
-    width_right = 640
-    f_pixel = (width_right * 0.5) / np.tan(alpha * 0.5 * np.pi/180)     # 1872.0771061225453
-
-    x_rightd = right_point[0]
-    x_leftd = left_point[0]
-
-    # CALCULATE THE DISPARITY:
-    disparity = x_leftd-x_rightd      #Displacement between left and right frames [pixels]
-    if disparity == 0:
-        return 0
-    
-    standardized_disparity = (disparity-mean)/std
-    normalized_disparity = standardized_disparity + normalized
-
-    zDepth = ((baseline * f_pixel) / disparity)         # return 'cm' unit zDepth
-
-    return abs(zDepth)
-    
-    # CALCULATE DEPTH Z:
-    # zDepth = ((baseline * f_pixel) / disparity) * 0.032808         # cm -> feet (by multiplying 0.032808)   # '*3' has been added -> need to be fixed in the future
-    # zDepthwithM = (M / disparity) * 0.032808                            # To use M, the camera calibration and stereo rectification should be perfect first.
-    # linearized_depth = (0.5877 + normalized_disparity)/0.0213       # feet
-
-    # print("zDepth, zDepthwithM, linearized depth")
-
-    # if linearized_depth > 100 or zDepth > 100:
-    #     return abs(zDepthwithM)
-
+    return df_bats

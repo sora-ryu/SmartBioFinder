@@ -5,6 +5,7 @@ import keras
 import os
 from PIL import Image
 import cv2
+import pandas as pd
 
 
 def get_file():
@@ -103,4 +104,16 @@ def check_images_size(data_folder):
     return data_info
 
 
+def read_csv_file(left_filepath, middle_filepath, right_filepath):
+
+    # Read dataframes (2D Bat Tracking Output from each video)
+    df_left = pd.read_csv(left_filepath)
+    df_middle = pd.read_csv(middle_filepath)
+    df_right = pd.read_csv(right_filepath)
+    
+    left_file, separator, extension = left_filepath.split("/")[-1].partition('.')
+    middle_file, separator, extension = middle_filepath.split("/")[-1].partition('.')
+    right_file, separator, extension = right_filepath.split("/")[-1].partition('.')
+
+    return df_left, df_middle, df_right, left_file, middle_file, right_file
 
