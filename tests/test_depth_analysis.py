@@ -61,7 +61,7 @@ def main():
     df_bats = match_frames_lm(df_left, df_middle, frame_diff_lm, df_bats)
     df_bats = match_frames_mr(df_middle, df_right, frame_diff_mr, df_bats)
     
-    df_bats_sorted = df_bats.sort_values(by=['Middle Image'])
+    df_bats_sorted = df_bats.sort_values(by=['Object ID', 'Middle Image'], key=lambda x: x if not '_' in x else x.str.split("_", expand=True)[9].str[:-4].astype(int))
     df_bats_sorted.to_excel(f'../Full_bat_{new_filename}.xlsx')
     endTime = time.time() 
     executionTime = endTime - startTime
